@@ -1,4 +1,5 @@
 set fish_greeting
+import_systemd_env
 
 if type -q vfox
     vfox activate fish | source
