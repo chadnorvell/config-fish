@@ -1,19 +1,9 @@
-function _prompt_symbol
-    set -l last_status $status
-
-    if test $last_status -ne 0
-        string join '' -- (set_color -o brred) "[$last_status] » " (set_color normal)
-    else
-        string join '' -- (set_color -o brgreen) "» " (set_color normal)
-    end
-end
-
 function _prompt_hostname
-    string join '' -- (set_color -o bryellow) (prompt_hostname) (set_color normal)
+    string join '' -- (set_color -o bryellow) (prompt_hostname) (set_color normal) ' '
 end
 
 function _prompt_pwd
-    string join '' -- (set_color -o brcyan) (prompt_pwd) (set_color normal)
+    string join '' -- (set_color -o brcyan) (prompt_pwd) (set_color normal) ' '
 end
 
 function _prompt_git
@@ -36,13 +26,24 @@ function _prompt_git
     set git_info (string replace '(' '' $git_info)
     set git_info (string replace ')' '' $git_info)
 
-    string join '' -- (set_color -o brmagenta) $git_info (set_color normal)
+    if test -n "$git_info"
+        string join '' -- (set_color -o brmagenta) $git_info (set_color normal) ' '
+    end
 end
 
 function fish_prompt
-    string join -n ' ' -- \
+    set -l last_status $status
+    set -l prompt_symbol (string join '' '» ' (set_color normal))
+
+    if test $last_status -ne 0
+        set prompt_symbol (string join '' (set_color -o brred) "[$last_status] $prompt_symbol")
+    else
+        set prompt_symbol (string join '' (set_color -o brgreen) $prompt_symbol)
+    end
+
+    string join '' -- \
         (_prompt_hostname) \
         (_prompt_pwd) \
         (_prompt_git) \
-        (_prompt_symbol)
+        $prompt_symbol
 end
