@@ -1,5 +1,7 @@
 function _prompt_hostname
-    string join '' -- (set_color -o bryellow) (prompt_hostname) (set_color normal) ' '
+    if test -z "$TMUX" 
+        string join '' -- (set_color -o bryellow) (prompt_hostname) (set_color normal) ' '
+    end
 end
 
 function _prompt_pwd
