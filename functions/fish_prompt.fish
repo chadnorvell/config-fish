@@ -35,6 +35,10 @@ function fish_prompt
     set -l last_status $status
     set -l prompt_symbol (string join '' '» ' (set_color normal))
 
+    if test -n "$IN_NIX_SHELL"
+        set prompt_symbol (string join '' "ƒ $prompt_symbol")
+    end
+
     if test $last_status -ne 0
         set prompt_symbol (string join '' (set_color -o brred) "[$last_status] $prompt_symbol")
     else
